@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2011-2012 Qualcomm Atheros, Inc. 
+ * All Rights Reserved. 
+ * Qualcomm Atheros Confidential and Proprietary. 
+ *
+ * Airgo Networks, Inc proprietary. All rights reserved.
+ * limSendMessages.h: Provides functions to send messages or Indications to HAL.
+ * Author:    Sunit Bhatia
+ * Date:       09/21/2006
+ * History:-
+ * Date        Modified by            Modification Information
+ *
+ * --------------------------------------------------------------------------
+ *
+ */
+#ifndef __LIM_SEND_MESSAGES_H
+#define __LIM_SEND_MESSAGES_H
+
+#include "aniGlobal.h"
+#include "limTypes.h"
+#include "halMsgApi.h"
+#include "sirParams.h"    
+tSirRetStatus limSendCFParams(tpAniSirGlobal pMac, tANI_U8 bssIdx, tANI_U8 cfpCount, tANI_U8 cfpPeriod);
+tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac, 
+                                  tpUpdateBeaconParams pUpdatedBcnParams,
+                                  tpPESession  psessionEntry );
+//tSirRetStatus limSendBeaconParams(tpAniSirGlobal pMac, tpUpdateBeaconParams pUpdatedBcnParams);
+#ifdef WLAN_FEATURE_11AC
+tSirRetStatus limSendModeUpdate(tpAniSirGlobal pMac, 
+                                tUpdateVHTOpMode *tempParam,
+                                tpPESession  psessionEntry );
+
+tANI_U32 limGetCenterChannel(tpAniSirGlobal pMac,
+                             tANI_U8 primarychanNum,
+                             ePhyChanBondState secondaryChanOffset, 
+                             tANI_U8 chanWidth);
+#endif
+#if defined WLAN_FEATURE_VOWIFI  
+tSirRetStatus limSendSwitchChnlParams(tpAniSirGlobal pMac, tANI_U8 chnlNumber, 
+                                      ePhyChanBondState secondaryChnlOffset, 
+                                      tPowerdBm maxTxPower,tANI_U8 peSessionId);
+#else
+tSirRetStatus limSendSwitchChnlParams(tpAniSirGlobal pMac, tANI_U8 chnlNumber, 
+                                      ePhyChanBondState secondaryChnlOffset, 
+                                      tANI_U8 localPwrConstraint,tANI_U8 peSessionId);
+#endif
+tSirRetStatus limSendEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *pUpdatedEdcaParams, tANI_U16 bssIdx, tANI_BOOLEAN highPerformance);
+tSirRetStatus limSetLinkState(tpAniSirGlobal pMac, tSirLinkState state,  tSirMacAddr bssId, 
+                              tSirMacAddr selfMac, tpSetLinkStateCallback callback,
+                              void *callbackArg);
+#ifdef WLAN_FEATURE_VOWIFI_11R
+extern tSirRetStatus limSetLinkStateFT(tpAniSirGlobal pMac, tSirLinkState 
+state,tSirMacAddr bssId, tSirMacAddr selfMacAddr, int ft, tpPESession psessionEntry);
+#endif
+tSirRetStatus limSendSetTxPowerReq(tpAniSirGlobal pMac, tpSirSetTxPowerReq pTxPowerReq);
+tSirRetStatus limSendGetTxPowerReq(tpAniSirGlobal pMac, tpSirGetTxPowerReq pTxPowerReq);
+void limSetActiveEdcaParams(tpAniSirGlobal pMac, tSirMacEdcaParamRecord *plocalEdcaParams, tpPESession psessionEntry);
+#define CAPABILITY_FILTER_MASK  0x73CF
+#define ERP_FILTER_MASK         0xF8
+#define EDCA_FILTER_MASK        0xF0
+#define QOS_FILTER_MASK         0xF0
+#define HT_BYTE0_FILTER_MASK    0x0
+#define HT_BYTE2_FILTER_MASK    0xEB
+#define HT_BYTE5_FILTER_MASK    0xFD
+#define DS_PARAM_CHANNEL_MASK   0x0
+
+tSirRetStatus limSendBeaconFilterInfo(tpAniSirGlobal pMac, tpPESession psessionEntry);
+
+#endif
